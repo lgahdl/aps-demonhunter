@@ -18,12 +18,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private final static int HEIGHT = 237;
     public final static int SCALE = 3;
 
+    public String gameState;
+
+
     public Game(){
 
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
         initFrame();
+
+        //Inicialização de variáveis da classe Game
+        gameState="CADASTRO";
+
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -36,7 +43,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
     }
 
     public static void main(String[] args) {
@@ -138,7 +144,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        int mx = (e.getX() / 3);
+        int my = (e.getY() / 3);
+        if(this.gameState = "CADASTRO"){
+            this.cadastroScreen.onClick(mx,my);
+        }
     }
 
     @Override
