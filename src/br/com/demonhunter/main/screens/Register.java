@@ -8,7 +8,7 @@ public class Register {
 
     }
 
-    public onClick(int x, int y){
+    public void onClick(int x, int y){
         x = x / Game.SCALE;
         y = y / Game.SCALE;
     }

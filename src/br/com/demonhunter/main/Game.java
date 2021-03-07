@@ -1,10 +1,13 @@
 package br.com.demonhunter.main;
 
+import br.com.demonhunter.main.screens.Register;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -20,6 +23,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     public String gameState;
 
+    public Register registerScreen;
 
     public Game(){
 
@@ -29,8 +33,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         initFrame();
 
         //Inicialização de variáveis da classe Game
-        gameState="CADASTRO";
-
+        gameState="REGISTER";
+        registerScreen = new Register();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -146,8 +150,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public void mousePressed(MouseEvent e) {
         int mx = (e.getX() / 3);
         int my = (e.getY() / 3);
-        if(this.gameState = "CADASTRO"){
-            this.cadastroScreen.onClick(mx,my);
+        if(this.gameState.equals("REGISTER")){
+            this.registerScreen.onClick(mx,my);
         }
     }
 
