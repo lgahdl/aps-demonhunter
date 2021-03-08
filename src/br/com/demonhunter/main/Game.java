@@ -1,5 +1,6 @@
 package br.com.demonhunter.main;
 
+import br.com.demonhunter.main.screens.Difficulty;
 import br.com.demonhunter.main.screens.Register;
 
 import javax.swing.*;
@@ -21,8 +22,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private final static int HEIGHT = 237;
     public final static int SCALE = 3;
 
-    public String gameState;
-
+	public String gameState;
+    public Difficulty difficultyScreen;
     public Register registerScreen;
 
     public Game(){
@@ -33,7 +34,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         initFrame();
 
         //Inicialização de variáveis da classe Game
-        gameState="REGISTER";
+        gameState="DIFFICULTY";
+        difficultyScreen = new Difficulty();
         registerScreen = new Register();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
@@ -77,6 +79,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
         g.setColor(new Color(25, 10, 100));
         g.fillRect(0, 0, WIDTH, HEIGHT);
+        if (gameState.equals("DIFFICULTY")) {
+        	difficultyScreen.render(g);
+        }
         g.dispose();
         g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
@@ -125,6 +130,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         }
 
     }
+    
+	public static int getWIDTH() {
+		return WIDTH;
+	}
+
+	public static int getHEIGHT() {
+		return HEIGHT;
+	}
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -151,6 +164,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         int mx = (e.getX() / 3);
         int my = (e.getY() / 3);
         if(this.gameState.equals("REGISTER")){
+            this.registerScreen.onClick(mx,my);
+        }
+        if(this.gameState.equals("DIFFICULTY")){
             this.registerScreen.onClick(mx,my);
         }
     }
