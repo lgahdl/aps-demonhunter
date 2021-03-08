@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.util.Map;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -17,15 +16,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private boolean isRunning;
     private static BufferedImage image;
 
-    private final static int WIDTH = 420;
-    private final static int HEIGHT = 237;
+    public final static int WIDTH = 420;
+    public final static int HEIGHT = 237;
     public final static int SCALE = 3;
 
     public String gameState;
 
     public Register registerScreen;
 
-    public Game(){
+    public Game() {
 
         addKeyListener(this);
         addMouseListener(this);
@@ -33,7 +32,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         initFrame();
 
         //Inicialização de variáveis da classe Game
-        gameState="REGISTER";
+        gameState = "REGISTER";
         registerScreen = new Register();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
@@ -77,6 +76,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
         g.setColor(new Color(25, 10, 100));
         g.fillRect(0, 0, WIDTH, HEIGHT);
+        //RENDERIZAÇÃO DAS ENTIDADES ABAIXO!!!
+        if (gameState.equals("REGISTER")) {
+            registerScreen.render(g);
+        }
+        //FIM DA RENDERIZAÇÃO DAS ENTIDADES
         g.dispose();
         g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
@@ -133,7 +137,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        if (gameState == "REGISTER") {
+            registerScreen.onKeyPressed(e.getKeyText(e.getKeyCode()));
+        }
     }
 
     @Override
@@ -150,8 +156,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public void mousePressed(MouseEvent e) {
         int mx = (e.getX() / 3);
         int my = (e.getY() / 3);
-        if(this.gameState.equals("REGISTER")){
-            this.registerScreen.onClick(mx,my);
+        if (this.gameState.equals("REGISTER")) {
+            this.registerScreen.onClick(mx, my);
         }
     }
 
