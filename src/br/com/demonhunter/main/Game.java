@@ -1,5 +1,8 @@
 package br.com.demonhunter.main;
 
+import br.com.demonhunter.main.screens.Difficulty;
+import br.com.demonhunter.main.screens.Menu;
+import br.com.demonhunter.main.screens.Mode;
 import br.com.demonhunter.main.screens.Register;
 
 import javax.swing.*;
@@ -7,7 +10,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.util.Map;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -17,15 +19,22 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private boolean isRunning;
     private static BufferedImage image;
 
-    private final static int WIDTH = 420;
-    private final static int HEIGHT = 237;
+    public final static int WIDTH = 420;
+    public final static int HEIGHT = 237;
     public final static int SCALE = 3;
 
-    public String gameState;
+
+    public static String state;
+    public static String difficulty;
+    public static String mode;
+
 
     public Register registerScreen;
+    public Menu menuScreen;
+    public Difficulty difficultyScreen;
+    public Mode modeScreen;
 
-    public Game(){
+    public Game() {
 
         addKeyListener(this);
         addMouseListener(this);
@@ -33,8 +42,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         initFrame();
 
         //Inicialização de variáveis da classe Game
-        gameState="REGISTER";
+        state = "REGISTER";
+        difficultyScreen = new Difficulty();
         registerScreen = new Register();
+        menuScreen = new Menu();
+        modeScreen = new Mode();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -75,9 +87,21 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         Graphics g = image.getGraphics();
 
 
-        g.setColor(new Color(25, 10, 100));
+        g.setColor(new Color(240, 80, 80));
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        //RENDERIZAÇÃO DAS ENTIDADES ABAIXO!!!
+        switch (state) {
+            case "REGISTER" -> registerScreen.render(g);
+            case "MENU" -> menuScreen.render(g);
+            case "DIFFICULTY" -> difficultyScreen.render(g);
+            case "MODE" -> modeScreen.render(g);
+        }
+
+
+        //FIM DA RENDERIZAÇÃO DAS ENTIDADES
         g.dispose();
+
         g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
         bs.show();
@@ -126,6 +150,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     }
 
+
+    public static void exitGame() {
+        System.exit(1);
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -133,7 +162,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        if (state == "REGISTER") {
+            registerScreen.onKeyPressed(e.getKeyText(e.getKeyCode()));
+        }
     }
 
     @Override
@@ -150,8 +181,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public void mousePressed(MouseEvent e) {
         int mx = (e.getX() / 3);
         int my = (e.getY() / 3);
-        if(this.gameState.equals("REGISTER")){
-            this.registerScreen.onClick(mx,my);
+        switch (state) {
+            case "REGISTER" -> this.registerScreen.onClick(mx, my);
+            case "MENU" -> this.menuScreen.onClick(mx, my);
+            case "DIFFICULTY" -> this.difficultyScreen.onClick(mx, my);
+            case "MODE" -> this.modeScreen.onClick(mx, my);
         }
     }
 
