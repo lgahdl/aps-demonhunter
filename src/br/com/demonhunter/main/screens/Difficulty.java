@@ -5,7 +5,7 @@ import br.com.demonhunter.main.Game;
 
 import java.awt.*;
 
-public class Difficulty {
+public class Difficulty implements Screen {
 
     public Difficulty() {
 

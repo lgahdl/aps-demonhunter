@@ -4,7 +4,7 @@ import br.com.demonhunter.main.Game;
 
 import java.awt.*;
 
-public class Mode {
+public class Mode implements Screen{
 
     public Mode() {
 

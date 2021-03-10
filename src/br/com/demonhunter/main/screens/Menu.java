@@ -4,7 +4,7 @@ import br.com.demonhunter.main.Game;
 
 import java.awt.*;
 
-public class Menu {
+public class Menu implements Screen{
 
     public Menu() {
 

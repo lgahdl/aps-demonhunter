@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Register {
+public class Register implements Screen {
 
     public static int unitHeight = Game.HEIGHT / 100, unitWidth = Game.WIDTH / 100;
 
