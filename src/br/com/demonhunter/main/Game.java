@@ -1,5 +1,8 @@
 package br.com.demonhunter.main;
 
+import br.com.demonhunter.entities.Entity;
+import br.com.demonhunter.entities.Player;
+import br.com.demonhunter.entities.Weapon;
 import br.com.demonhunter.main.screens.Difficulty;
 import br.com.demonhunter.main.screens.Menu;
 import br.com.demonhunter.main.screens.Mode;
@@ -10,6 +13,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -29,10 +34,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public static String mode;
 
 
+    public static Player player;
+    public static List<Entity> entities;
+
     public Register registerScreen;
     public Menu menuScreen;
     public Difficulty difficultyScreen;
     public Mode modeScreen;
+
 
     public Game() {
 
@@ -47,6 +56,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         registerScreen = new Register();
         menuScreen = new Menu();
         modeScreen = new Mode();
+        entities = new ArrayList<>();
+        player = new Player(0, 0, 32, 32, null);
+        entities.add(player);
+        entities.add(new Weapon(128, 128, 16, 16, null));
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -73,7 +86,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public void tick() {
-
+        player.tick();
     }
 
     public void render() {
@@ -97,7 +110,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             case "DIFFICULTY" -> difficultyScreen.render(g);
             case "MODE" -> modeScreen.render(g);
         }
-
+        if (state.equals("PLAYING")) {
+            for (Entity e : entities) {
+                e.render(g);
+            }
+        }
 
         //FIM DA RENDERIZAÇÃO DAS ENTIDADES
         g.dispose();
@@ -164,12 +181,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public void keyPressed(KeyEvent e) {
         if (state == "REGISTER") {
             registerScreen.onKeyPressed(e.getKeyText(e.getKeyCode()));
+        } else if (state == "PLAYING") {
+            player.onKeyPressed(e);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        if (state == "PLAYING") {
+            player.onKeyReleased(e);
+        }
     }
 
     @Override

@@ -32,7 +32,6 @@ public class Register {
             if (y >= 50 && y <= 75) {
                 this.nameTextField.focused = true;
                 this.focusedTextField = this.nameTextField;
-                this.focusedTextField = this.nameTextField;
                 return;
             } else if (y >= 100 && y <= 125) {
                 this.ageTextField.focused = true;
