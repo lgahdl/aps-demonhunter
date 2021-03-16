@@ -119,9 +119,15 @@ public class Register implements Screen {
         }
 
         switch (key) {
-            case "Backspace" -> this.focusedTextField.removeChar();
-            case "Space" -> this.focusedTextField.addSpace();
-            default -> this.focusedTextField.addString(key);
+            case "Backspace":
+                this.focusedTextField.removeChar();
+                break;
+            case "Space":
+                this.focusedTextField.addSpace();
+                break;
+            default:
+                this.focusedTextField.addString(key);
+                break;
         }
     }
 

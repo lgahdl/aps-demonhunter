@@ -105,10 +105,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
         //RENDERIZAÇÃO DAS ENTIDADES ABAIXO!!!
         switch (state) {
-            case "REGISTER" -> registerScreen.render(g);
-            case "MENU" -> menuScreen.render(g);
-            case "DIFFICULTY" -> difficultyScreen.render(g);
-            case "MODE" -> modeScreen.render(g);
+            case "REGISTER":
+                registerScreen.render(g);
+                break;
+            case "MENU":
+                menuScreen.render(g);
+                break;
+            case "DIFFICULTY":
+                difficultyScreen.render(g);
+                break;
+            case "MODE":
+                modeScreen.render(g);
+                break;
         }
         if (state.equals("PLAYING")) {
             for (Entity e : entities) {
@@ -203,10 +211,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         int mx = (e.getX() / 3);
         int my = (e.getY() / 3);
         switch (state) {
-            case "REGISTER" -> this.registerScreen.onClick(mx, my);
-            case "MENU" -> this.menuScreen.onClick(mx, my);
-            case "DIFFICULTY" -> this.difficultyScreen.onClick(mx, my);
-            case "MODE" -> this.modeScreen.onClick(mx, my);
+            case "REGISTER":
+                this.registerScreen.onClick(mx, my);
+                break;
+            case "MENU":
+                this.menuScreen.onClick(mx, my);
+                break;
+            case "DIFFICULTY":
+                this.difficultyScreen.onClick(mx, my);
+                break;
+            case "MODE":
+                this.modeScreen.onClick(mx, my);
+                break;
         }
     }
 
