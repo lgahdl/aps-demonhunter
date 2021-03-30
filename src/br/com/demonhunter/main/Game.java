@@ -3,10 +3,12 @@ package br.com.demonhunter.main;
 import br.com.demonhunter.entities.Entity;
 import br.com.demonhunter.entities.Player;
 import br.com.demonhunter.entities.Weapon;
+import br.com.demonhunter.graphics.SpriteManager;
 import br.com.demonhunter.main.screens.Difficulty;
 import br.com.demonhunter.main.screens.Menu;
 import br.com.demonhunter.main.screens.Mode;
 import br.com.demonhunter.main.screens.Register;
+import br.com.demonhunter.world.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,19 +26,28 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private boolean isRunning;
     private static BufferedImage image;
 
+    //Window Params
     public final static int WIDTH = 420;
     public final static int HEIGHT = 237;
     public final static int SCALE = 3;
 
-
+    //Game params
     public static String state;
     public static String difficulty;
     public static String mode;
 
+    //Graphics
+    public static SpriteManager spriteManager;
 
+    //World
+    public static World world;
+    private int curLevel = 1;
+
+    //Entities
     public static Player player;
     public static List<Entity> entities;
 
+    //Screens
     public Register registerScreen;
     public Menu menuScreen;
     public Difficulty difficultyScreen;
@@ -50,17 +61,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         addMouseMotionListener(this);
         initFrame();
 
+
         //Inicialização de variáveis da classe Game
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        spriteManager = new SpriteManager(
+                "/enemy.png",
+                "/tile.png",
+                "/player.png",
+                "/object.png");
         state = "REGISTER";
         difficultyScreen = new Difficulty();
         registerScreen = new Register();
         menuScreen = new Menu();
         modeScreen = new Mode();
         entities = new ArrayList<>();
-        player = new Player(0, 0, 32, 32, null);
+        player = new Player(0, 0, 32, 32);
         entities.add(player);
         entities.add(new Weapon(128, 128, 16, 16, null));
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        world = new World("map" + curLevel + ".png");
+
     }
 
     private void initFrame() {
@@ -104,6 +123,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         //RENDERIZAÇÃO DAS ENTIDADES ABAIXO!!!
+
+        world.render(g);
+
         switch (state) {
             case "REGISTER":
                 registerScreen.render(g);
