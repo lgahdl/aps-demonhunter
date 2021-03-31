@@ -27,9 +27,12 @@ public class World {
             for (int i = 0; i < map.getWidth(); i++) {
                 for (int j = 0; j < map.getHeight(); j++) {
                     int pixelToAnalyze = pixels[i + (j * map.getWidth())];
-                    tiles[i + (j * WIDTH)] = new FloorTile(i * 32, j * 32);
+                    tiles[i + (j * WIDTH)] = new CastleFloorTile(i * 32, j * 32);
                     switch (pixelToAnalyze) {
                         case 0xFF808080:
+                            tiles[i + (j * WIDTH)] = new CastleFloorTile(i * 32, j * 32);
+                            break;
+                        case 0xFF000000:
                             tiles[i + (j * WIDTH)] = new CastleFloorTile(i * 32, j * 32);
                             break;
                         case 0xFFFFFFFF:
@@ -46,7 +49,6 @@ public class World {
 
                             break;
                         case 0xFF404040: // GRAFITE
-
                             break;
                         case 0xFF00FF00: // VERDE
                             // LIFEPACK
