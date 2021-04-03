@@ -2,7 +2,7 @@ package br.com.demonhunter.main;
 
 import br.com.demonhunter.entities.Entity;
 import br.com.demonhunter.entities.Player;
-import br.com.demonhunter.entities.Weapon;
+import br.com.demonhunter.entities.weapons.Weapon;
 import br.com.demonhunter.graphics.SpriteManager;
 import br.com.demonhunter.main.screens.Difficulty;
 import br.com.demonhunter.main.screens.Menu;
@@ -46,6 +46,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     //Entities
     public static Player player;
     public static List<Entity> entities;
+    public static List<Weapon> weapons;
 
     //Screens
     public Register registerScreen;
@@ -75,9 +76,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         menuScreen = new Menu();
         modeScreen = new Mode();
         entities = new ArrayList<>();
+        weapons = new ArrayList<>();
         player = new Player(0, 0, 32, 32);
         entities.add(player);
-        entities.add(new Weapon(128, 128, 16, 16, null));
+        weapons.add(new Weapon(128, 128, 16, 16, null));
         world = new World("map" + curLevel + ".png");
 
     }
@@ -143,6 +145,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         if (state.equals("PLAYING")) {
             for (Entity e : entities) {
                 e.render(g);
+            }
+            for (Weapon w : weapons) {
+                w.render(g);
             }
         }
 

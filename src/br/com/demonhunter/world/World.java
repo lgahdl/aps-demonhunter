@@ -49,9 +49,10 @@ public class World {
 
                             break;
                         case 0xFF404040: // GRAFITE
+
                             break;
                         case 0xFF00FF00: // VERDE
-                            // LIFEPACK
+
                             break;
                         case 0xFF0000FF: // AZUL
                             // PLAYER

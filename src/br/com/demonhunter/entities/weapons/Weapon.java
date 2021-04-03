@@ -1,5 +1,6 @@
-package br.com.demonhunter.entities;
+package br.com.demonhunter.entities.weapons;
 
+import br.com.demonhunter.entities.Entity;
 import br.com.demonhunter.graphics.Camera;
 
 import java.awt.*;
@@ -12,9 +13,13 @@ public class Weapon extends Entity {
         super(x, y, width, height, sprite);
     }
 
+    public void attack(int x, int y, int dx, int dy) {
+
+    }
+
     public void render(Graphics g) {
         g.setColor(Color.GREEN);
-        g.fillRect(this.getX() - Camera.x, this.getY()-Camera.y, this.getWidth(), this.getHeight());
+        g.fillRect(this.getX() - Camera.x, this.getY() - Camera.y, this.getWidth(), this.getHeight());
     }
 
 }

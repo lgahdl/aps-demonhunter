@@ -1,12 +1,14 @@
 package br.com.demonhunter.entities;
 
+import br.com.demonhunter.entities.weapons.Weapon;
 import br.com.demonhunter.graphics.Camera;
 import br.com.demonhunter.main.Game;
 import br.com.demonhunter.world.World;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Player extends Entity {
 
@@ -14,7 +16,7 @@ public class Player extends Entity {
 
     public String lastPressedMovementKey = "down";
 
-    public boolean haveWeapon;
+    public Weapon weapon = null;
 
     public boolean moved = false;
 
@@ -22,7 +24,7 @@ public class Player extends Entity {
 
     public static int speed = 2;
 
-    private BufferedImage[] downPlayer;
+    private Map<String, BufferedImage[]> sprites;
 
     private BufferedImage[] leftPlayer;
 
@@ -33,24 +35,27 @@ public class Player extends Entity {
 
     public Player(int x, int y, int width, int height) {
 
-        super(x, y, width, height, null);
-
-        downPlayer = new BufferedImage[8];
-        leftPlayer = new BufferedImage[8];
-        rightPlayer = new BufferedImage[8];
-        upPlayer = new BufferedImage[8];
+        super(x, y, width, height);
+        this.sprites = new HashMap<>();
+        this.sprites.put("up", new BufferedImage[8]);
+        this.sprites.put("down", new BufferedImage[8]);
+        this.sprites.put("left", new BufferedImage[8]);
+        this.sprites.put("right", new BufferedImage[8]);
 
         for (int i = 0; i < 8; i++) {
-            downPlayer[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 0, 32, 32);
-            rightPlayer[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 32, 32, 32);
-            leftPlayer[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 64, 32, 32);
-            upPlayer[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 96, 32, 32);
+            this.sprites.get("down")[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 0, 32, 32);
+            this.sprites.get("right")[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 32, 32, 32);
+            this.sprites.get("left")[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 64, 32, 32);
+            this.sprites.get("up")[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 96, 32, 32);
         }
 
     }
 
     @Override
     public void tick() {
+        if (!moved) {
+            index = 0;
+        }
         if (this.up && Game.world.isFree(this.getX(), this.getY() - speed)) {
             this.setY(this.getY() - speed);
             this.lastPressedMovementKey = "up";
@@ -82,51 +87,8 @@ public class Player extends Entity {
                 }
             }
         }
-
+        this.setSprite(this.sprites.get(lastPressedMovementKey)[index]);
         checkCollisionWeapon();
-    }
-
-//    public void setCamera() {
-//        Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, Game.world.WIDTH * 32 - Game.WIDTH);
-//        Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2), 0, Game.world.HEIGHT * 32 - Game.HEIGHT);
-//    }
-
-    @Override
-    public void render(Graphics g) {
-        int positionX = this.getX() - Camera.x;
-        int positionY = this.getY() - Camera.y;
-        switch (lastPressedMovementKey) {
-            case "right":
-                if (right) {
-                    g.drawImage(rightPlayer[index], positionX, positionY, null);
-                } else {
-                    g.drawImage(rightPlayer[0], positionX, positionY, null);
-                }
-                break;
-            case "left":
-                if (left) {
-                    g.drawImage(leftPlayer[index], positionX, positionY, null);
-                } else {
-                    g.drawImage(leftPlayer[0], positionX, positionY, null);
-                }
-                break;
-            case "up":
-                if (up) {
-                    g.drawImage(upPlayer[index], positionX, positionY, null);
-                } else {
-                    g.drawImage(upPlayer[0], positionX, positionY, null);
-                }
-                break;
-            case "down":
-                if (down) {
-                    g.drawImage(downPlayer[index], positionX, positionY, null);
-                } else {
-                    g.drawImage(downPlayer[0], positionX, positionY, null);
-                }
-                break;
-            default:
-                break;
-        }
         setCamera();
     }
 
@@ -136,16 +98,15 @@ public class Player extends Entity {
     }
 
     public void checkCollisionWeapon() {
-        for (int i = 0; i < Game.entities.size(); i++) {
-            Entity atual = Game.entities.get(i);
-            if (atual instanceof Weapon) {
-                if (Entity.isColidding(this, atual)) {
-                    this.haveWeapon = true;
-                    Game.entities.remove(atual);
-                }
+        for (int i = 0; i < Game.weapons.size(); i++) {
+            Weapon atual = Game.weapons.get(i);
+            if (isColidding(this, atual)) {
+                this.weapon = atual;
+                Game.weapons.remove(atual);
             }
         }
     }
+
 
     public void onKeyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_D) {
@@ -167,13 +128,17 @@ public class Player extends Entity {
     public void onKeyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_D) {
             this.right = false;
+            this.moved = false;
         } else if (e.getKeyCode() == KeyEvent.VK_A) {
             this.left = false;
+            this.moved = false;
         }
         if (e.getKeyCode() == KeyEvent.VK_W) {
             this.up = false;
+            this.moved = false;
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
             this.down = false;
+            this.moved = false;
         }
     }
 
