@@ -27,8 +27,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private static BufferedImage image;
 
     //Window Params
-    public final static int WIDTH = 420;
-    public final static int HEIGHT = 237;
+    public static int selectedScreen = 0;
+    public static GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+    public static String displayMode = "WINDOW"; // FULLSCREEN or WINDOW
+    public static int WIDTH = 420;
+    public static int HEIGHT = 237;
     public final static int SCALE = 3;
 
     //Game params
@@ -62,7 +65,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         addMouseMotionListener(this);
         initFrame();
 
-
         //Inicialização de variáveis da classe Game
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         spriteManager = new SpriteManager(
@@ -79,20 +81,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         weapons = new ArrayList<>();
         player = new Player(0, 0, 32, 32);
         entities.add(player);
-        weapons.add(new Weapon(128, 128, 16, 16, null));
         world = new World("map" + curLevel + ".png");
-
     }
 
     private void initFrame() {
         frame = new JFrame("Game");
         frame.add(this);
-        setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        frame.setResizable(false);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        // FULLSCREEN
+        if (displayMode == "FULLSCREEN") {
+            showOnScreen(selectedScreen, frame);
+        }
+        // WINDOW MODE
+        else if (displayMode == "WINDOW") {
+            setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+            frame.setResizable(false);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {
@@ -107,7 +114,34 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public void tick() {
+        for (int i = 0; i < entities.size(); i++) {
+            Entity e = entities.get(i);
+            e.tick();
+        }
         player.tick();
+    }
+
+    public void showOnScreen(int screen, JFrame frame) {
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		setPreferredSize(screenSize);
+        GraphicsConfiguration[] screenConfig = screenDevices[screen].getConfigurations();
+        int width = (int) screenConfig[0].getBounds().getWidth();
+        int height = (int) screenConfig[0].getBounds().getHeight();
+        setPreferredSize(new Dimension(width, height));
+        WIDTH = width / SCALE;
+        HEIGHT = height / SCALE;
+        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+        frame.setResizable(false);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if (screen > -1 && screen < screenDevices.length) {
+            screenDevices[screen].setFullScreenWindow(frame);
+        } else if (screenDevices.length > 0) {
+            screenDevices[0].setFullScreenWindow(frame);
+        } else {
+            throw new RuntimeException("No Screens Found");
+        }
     }
 
     public void render() {
@@ -141,6 +175,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             case "MODE":
                 modeScreen.render(g);
                 break;
+            case "PAUSE":
+                menuScreen.render(g);
         }
         if (state.equals("PLAYING")) {
             for (Entity e : entities) {
@@ -217,15 +253,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         if (state == "REGISTER") {
             registerScreen.onKeyPressed(e.getKeyText(e.getKeyCode()));
         } else if (state == "PLAYING") {
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                state = "PAUSE";
+                player.stopMovement();
+            }
             player.onKeyPressed(e);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (state == "PLAYING") {
-            player.onKeyReleased(e);
-        }
+        player.onKeyReleased(e);
     }
 
     @Override
@@ -242,6 +280,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 this.registerScreen.onClick(mx, my);
                 break;
             case "MENU":
+            case "PAUSE":
                 this.menuScreen.onClick(mx, my);
                 break;
             case "DIFFICULTY":

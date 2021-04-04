@@ -4,7 +4,7 @@ import br.com.demonhunter.main.Game;
 
 import java.awt.*;
 
-public class Menu implements Screen{
+public class Menu implements Screen {
 
     public Menu() {
 
@@ -30,7 +30,11 @@ public class Menu implements Screen{
     }
 
     private void play() {
-        Game.state = "DIFFICULTY";
+        if (Game.state == "MENU") {
+            Game.state = "DIFFICULTY";
+        } else {
+            Game.state = "PLAYING";
+        }
     }
 
     public void render(Graphics graphics) {

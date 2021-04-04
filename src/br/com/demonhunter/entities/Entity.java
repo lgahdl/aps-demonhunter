@@ -1,5 +1,6 @@
 package br.com.demonhunter.entities;
 
+import br.com.demonhunter.entities.attack.Attack;
 import br.com.demonhunter.graphics.Camera;
 
 import java.awt.*;
@@ -76,9 +77,13 @@ public abstract class Entity {
 
     }
 
+    public void receiveCollision(Attack attack) {
+
+    }
+
     public void render(Graphics g) {
         if (this.sprite != null) {
-            g.drawImage(this.sprite, this.getX()+((32-this.getWidth())/2) - Camera.x, this.getY()+((32-this.getHeight())/2) - Camera.y, null);
+            g.drawImage(this.sprite, this.getX() + ((32 - this.getWidth()) / 2) - Camera.x, this.getY() + ((32 - this.getHeight()) / 2) - Camera.y, null);
         } else {
             g.setColor(Color.GREEN);
             g.fillRect(x, y, width, height);

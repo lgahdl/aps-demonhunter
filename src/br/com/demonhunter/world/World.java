@@ -1,5 +1,10 @@
 package br.com.demonhunter.world;
 
+import br.com.demonhunter.entities.Enemy;
+import br.com.demonhunter.entities.objects.LifePotion;
+import br.com.demonhunter.entities.objects.ManaPotion;
+import br.com.demonhunter.entities.weapons.Staff;
+import br.com.demonhunter.entities.weapons.Sword;
 import br.com.demonhunter.graphics.Camera;
 import br.com.demonhunter.main.Game;
 import br.com.demonhunter.world.tiles.*;
@@ -39,25 +44,30 @@ public class World {
                             tiles[i + (j * WIDTH)] = new CastleWallTile(i * 32, j * 32);
                             // WALL
                             break;
-                        case 0xFFFF0000: // VERMELHO
-                            // ENEMY
-                            break;
-                        case 0xFFFFFF00: // AMARELO
-
-                            break;
-                        case 0xFF00FFFF: // CIANO
-
-                            break;
-                        case 0xFF404040: // GRAFITE
-
-                            break;
-                        case 0xFF00FF00: // VERDE
-
-                            break;
                         case 0xFF0000FF: // AZUL
                             // PLAYER
                             Game.player.setX(i * 32);
                             Game.player.setY(j * 32);
+                            break;
+                        case 0xFFFF0000: // VERMELHO
+                            // ENEMY
+                            Game.entities.add(new Enemy(i * 32, j * 32, 32, 32));
+                            break;
+                        case 0xFF00FF00: // VERDE
+                            //VIDA
+                            Game.entities.add(new LifePotion(i * 32, j * 32, 32, 32));
+                            break;
+                        case 0xFF00FFFF: // CIANO
+                            //MANA
+                            Game.entities.add(new ManaPotion(i * 32, j * 32, 32, 32));
+                            break;
+                        case 0xFFFF8000: // LARANJA
+                            //STAFF
+                            Game.weapons.add(new Staff(i * 32, j * 32));
+                            break;
+                        case 0xFF666666: // AMARELO
+                            //SWORD
+                            Game.weapons.add(new Sword(i * 32, j * 32));
                             break;
                         default:
                             tiles[i + (j * WIDTH)] = new FloorTile(i * 32, j * 32);
