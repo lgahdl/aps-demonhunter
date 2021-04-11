@@ -19,6 +19,11 @@ public class Player extends Entity {
     public int attackFrames = 0;
     public int attackId = 0;
 
+    //DAMAGE
+    private int hitDamage = 0, hitDx = 0, hitDy = 0;
+    private boolean invunerable = false, receivedHit = false, throwBack = false;
+    private int invunerableFrames = 0, invunerableFramesMax = 60, throwBackFrames = 0, throwBackFramesMax = 10;
+
     //STATUS
     private int life = 100, maxLife = 100, mana = 100, maxMana = 100;
     public boolean isDead = false;
@@ -84,7 +89,7 @@ public class Player extends Entity {
             attacked = false;
             int dx = this.lastPressedMovementKey.equals("left") ? -1 : this.lastPressedMovementKey.equals("right") ? 1 : 0;
             int dy = this.lastPressedMovementKey.equals("up") ? -1 : this.lastPressedMovementKey.equals("down") ? 1 : 0;
-            if (this.changeMana(weapon.attacks.get(attackId).manaCost)) {
+            if (this.changeMana(-weapon.attacks.get(attackId).manaCost)) {
                 isAttacking = true;
                 weapon.attack(getX(), getY(), dx, dy, attackId, this);
             }
@@ -115,8 +120,40 @@ public class Player extends Entity {
                 }
             }
         }
+
+        if (receivedHit) {
+            changeLife(-hitDamage);
+            hitDamage = 0;
+            receivedHit = false;
+            invunerable = true;
+            throwBack = true;
+        }
+
+        if (throwBack) {
+            int movementX = this.hitDx * 4 * speed;
+            int movementY = this.hitDy * 4 * speed;
+            if (Game.world.isFree(this.getX() + movementX, this.getY() + movementY)) {
+                this.setX(this.getX() + movementX);
+                this.setY(this.getY() + movementY);
+            }
+            if (++throwBackFrames >= throwBackFramesMax) {
+                throwBack = false;
+                throwBackFrames = 0;
+            }
+        }
+
+        if (invunerable) {
+            if (++invunerableFrames >= invunerableFramesMax) {
+                invunerable = false;
+                invunerableFrames = 0;
+            }
+        }
+
         setSprite(sprites.get(lastPressedMovementKey)[index]);
         checkCollisionWeapon();
+        if (!invunerable) {
+            checkCollisionEnemy();
+        }
         setCamera();
     }
 
@@ -128,12 +165,28 @@ public class Player extends Entity {
     public void checkCollisionWeapon() {
         for (int i = 0; i < Game.weapons.size(); i++) {
             Weapon atual = Game.weapons.get(i);
-            if (isColidding(this, atual)) {
+            if (isColliding(this, atual)) {
                 if (this.weapon != null) {
                     Game.weapons.add(this.weapon.getInstance(this.getX() + 64, this.getY() + 32));
                 }
                 weapon = atual;
                 Game.weapons.remove(atual);
+            }
+        }
+    }
+
+    public void checkCollisionEnemy() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity atual = Game.entities.get(i);
+            if (isColliding(this, atual)) {
+                if (atual instanceof Enemy) {
+                    receivedHit = true;
+                    hitDamage = 10;
+                    int diffX = getX() - atual.getX();
+                    int diffY = getY() - atual.getY();
+                    hitDx = Integer.compare(diffX, 0);
+                    hitDy = Integer.compare(diffY, 0);
+                }
             }
         }
     }
@@ -190,15 +243,15 @@ public class Player extends Entity {
         if (life > maxLife) {
             life = maxLife;
         } else if (life <= 0) {
+            life = 0;
             this.isDead = true;
         }
     }
 
     public boolean changeMana(int manaPoints) {
-        int currentMana = mana;
         mana += manaPoints;
         if (mana < 0) {
-            mana = currentMana;
+            mana = 0;
             return false;
         } else if (mana > maxMana) {
             mana = maxMana;

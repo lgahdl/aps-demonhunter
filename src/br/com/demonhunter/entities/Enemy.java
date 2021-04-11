@@ -14,9 +14,9 @@ public class Enemy extends Entity {
 
     private int hitDamage = 0, hitDx = 0, hitDy = 0;
 
-    private boolean invunerable = false, receivedHit = false;
+    private boolean invunerable = false, receivedHit = false, throwBack = false;
 
-    private int invunerableFrames = 0, invunerableFramesMax = 10;
+    private int invunerableFrames = 0, invunerableFramesMax = 60, throwBackFrames = 0, throwBackFramesMax = 10;
 
     public Enemy(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -56,22 +56,27 @@ public class Enemy extends Entity {
             }
         }
         if (receivedHit) {
-            System.out.println("receivedHit");
             changeLife(-hitDamage);
             hitDamage = 0;
             receivedHit = false;
             invunerable = true;
+            throwBack = true;
         }
 
-        if (invunerable) {
-            System.out.println("invunerable");
+        if (throwBack) {
             int movementX = this.hitDx * 8 * speed;
             int movementY = this.hitDy * 8 * speed;
             if (Game.world.isFree(this.getX() + movementX, this.getY() + movementY)) {
                 this.setX(this.getX() + movementX);
                 this.setY(this.getY() + movementY);
             }
+            if (++throwBackFrames >= throwBackFramesMax) {
+                throwBack = false;
+                throwBackFrames = 0;
+            }
+        }
 
+        if (invunerable) {
             if (++invunerableFrames >= invunerableFramesMax) {
                 invunerable = false;
                 invunerableFrames = 0;

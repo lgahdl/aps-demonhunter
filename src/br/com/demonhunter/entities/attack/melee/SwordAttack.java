@@ -10,9 +10,9 @@ import java.awt.image.BufferedImage;
 
 public class SwordAttack extends Attack {
 
-    public static final int cooldown = 30, damage = 10, manaCost = 0;
+    public static final int cooldown = 20, damage = 10, manaCost = 0;
 
-    private int speed = 2, countdownToDestroy = 0;
+    private int speed = 3, countdownToDestroy = 0;
 
     private BufferedImage[] sprites;
 
@@ -30,11 +30,12 @@ public class SwordAttack extends Attack {
 
         if (++countdownToDestroy >= cooldown) {
             Game.entities.remove(this);
+            countdownToDestroy = 0;
         }
 
         for (int i = 0; i < Game.entities.size(); i++) {
             Entity entity = Game.entities.get(i);
-            if (isColidding(this, entity) && !entity.equals(this) && !entity.equals(owner)) {
+            if (isColliding(this, entity) && !entity.equals(this) && !entity.equals(owner)) {
                 entity.receiveCollision(this);
             }
         }

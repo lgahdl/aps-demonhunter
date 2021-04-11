@@ -67,7 +67,7 @@ public abstract class Entity {
         this.sprite = sprite;
     }
 
-    public static boolean isColidding(Entity e1, Entity e2) {
+    public static boolean isColliding(Entity e1, Entity e2) {
         Rectangle rect1 = new Rectangle(e1.getX(), e1.getY(), e1.getWidth(), e1.getHeight());
         Rectangle rect2 = new Rectangle(e2.getX(), e2.getY(), e2.getWidth(), e2.getHeight());
         return rect1.intersects(rect2);

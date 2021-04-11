@@ -21,7 +21,7 @@ public class Fireball extends Attack {
     public void tick() {
         for (int i = 0; i < Game.entities.size(); i++) {
             Entity entity = Game.entities.get(i);
-            if (isColidding(this, entity) && !entity.equals(this) && !entity.equals(owner)) {
+            if (isColliding(this, entity) && !entity.equals(this) && !entity.equals(owner)) {
                 boolean received = entity.receiveCollision(this);
                 if (received) {
                     Game.entities.remove(this);
