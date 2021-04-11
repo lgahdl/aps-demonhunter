@@ -4,10 +4,9 @@ import br.com.demonhunter.entities.Entity;
 import br.com.demonhunter.entities.Player;
 import br.com.demonhunter.entities.weapons.Weapon;
 import br.com.demonhunter.graphics.SpriteManager;
-import br.com.demonhunter.main.screens.Difficulty;
+import br.com.demonhunter.graphics.UI;
+import br.com.demonhunter.main.screens.*;
 import br.com.demonhunter.main.screens.Menu;
-import br.com.demonhunter.main.screens.Mode;
-import br.com.demonhunter.main.screens.Register;
 import br.com.demonhunter.world.World;
 
 import javax.swing.*;
@@ -56,6 +55,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public Menu menuScreen;
     public Difficulty difficultyScreen;
     public Mode modeScreen;
+    public UI uiScreen;
 
 
     public Game() {
@@ -77,6 +77,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         registerScreen = new Register();
         menuScreen = new Menu();
         modeScreen = new Mode();
+        uiScreen = new UI();
         entities = new ArrayList<>();
         weapons = new ArrayList<>();
         player = new Player(0, 0, 32, 32);
@@ -185,6 +186,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             for (Weapon w : weapons) {
                 w.render(g);
             }
+            uiScreen.render(g);
         }
 
         //FIM DA RENDERIZAÇÃO DAS ENTIDADES
@@ -281,7 +283,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 break;
             case "MENU":
             case "PAUSE":
-                this.menuScreen.onClick(mx, my);
+                menuScreen.onClick(mx, my);
                 break;
             case "DIFFICULTY":
                 this.difficultyScreen.onClick(mx, my);

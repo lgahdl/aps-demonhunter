@@ -20,6 +20,7 @@ public class Player extends Entity {
     public int attackId = 0;
 
     //STATUS
+
     private int life = 100, maxLife = 100, mana = 100, maxMana = 100;
     public boolean isDead = false;
 
@@ -212,4 +213,35 @@ public class Player extends Entity {
         this.changeLife(-attack.damage);
     }
 
+    public int getLife() {
+        return life;
+
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public int getMaxLife() {
+        return maxLife;
+    }
+
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
+    }
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    public int getMaxMana() {
+        return maxMana;
+    }
+
+    public void setMaxMana(int maxMana) {
+        this.maxMana = maxMana;
+    }
 }

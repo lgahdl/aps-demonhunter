@@ -10,6 +10,25 @@ public class Menu implements Screen {
 
     }
 
+    @Override
+    public void render(Graphics g) {
+        g.setColor(new Color(15, 15, 15));
+        g.fillRect(50, 50, 300, 25);
+        g.setColor(Color.WHITE);
+        g.drawString("PLAY", 185, 65);
+
+        g.setColor(new Color(15, 15, 15));
+        g.fillRect(50, 100, 300, 25);
+        g.setColor(Color.WHITE);
+        g.drawString("LOAD", 185, 115);
+
+        g.setColor(new Color(15, 15, 15));
+        g.fillRect(50, 150, 300, 25);
+        g.setColor(Color.WHITE);
+        g.drawString("QUIT", 185, 165);
+    }
+
+    @Override
     public void onClick(int x, int y) {
         if (x > 50 && x < 350) {
             if (y >= 50 && y <= 75) {
@@ -37,23 +56,6 @@ public class Menu implements Screen {
         }
     }
 
-    public void render(Graphics graphics) {
-        graphics.setColor(new Color(15, 15, 15));
-        graphics.fillRect(50, 50, 300, 25);
-        graphics.setColor(Color.WHITE);
-        graphics.drawString("PLAY", 185, 65);
-
-        graphics.setColor(new Color(15, 15, 15));
-        graphics.fillRect(50, 100, 300, 25);
-        graphics.setColor(Color.WHITE);
-        graphics.drawString("LOAD", 185, 115);
-
-        graphics.setColor(new Color(15, 15, 15));
-        graphics.fillRect(50, 150, 300, 25);
-        graphics.setColor(Color.WHITE);
-        graphics.drawString("QUIT", 185, 165);
-
-    }
 
 
 }
