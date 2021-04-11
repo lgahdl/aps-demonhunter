@@ -48,10 +48,12 @@ public class World {
                             // PLAYER
                             Game.player.setX(i * 32);
                             Game.player.setY(j * 32);
+
                             break;
                         case 0xFFFF0000: // VERMELHO
                             // ENEMY
                             Game.entities.add(new Enemy(i * 32, j * 32, 32, 32));
+
                             break;
                         case 0xFF00FF00: // VERDE
                             //VIDA

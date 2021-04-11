@@ -44,7 +44,6 @@ public class Difficulty implements Screen {
 
     private void setDifficulty(String difficulty) {
         Game.difficulty = difficulty;
-        System.out.println("THE GAME DIFFICULTY IS NOW: " + difficulty);
         Game.state = "MODE";
     }
 }

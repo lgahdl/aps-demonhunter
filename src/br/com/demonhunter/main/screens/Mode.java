@@ -38,6 +38,6 @@ public class Mode implements Screen{
     private void setGameMode(String mode) {
         Game.mode = mode;
         System.out.println("THE GAME MODE IS NOW: " + mode);
-        Game.state = "PLAYING";
+        Game.startWorld();
     }
 }

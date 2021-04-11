@@ -7,9 +7,11 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Weapon extends Entity {
+public abstract class Weapon extends Entity {
 
     public Map<Integer, Attack> attacks;
+
+    public boolean stopOnAttack = false;
 
     public Weapon(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);

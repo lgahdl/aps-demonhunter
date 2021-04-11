@@ -77,8 +77,8 @@ public abstract class Entity {
 
     }
 
-    public void receiveCollision(Attack attack) {
-
+    public boolean receiveCollision(Attack attack) {
+        return false;
     }
 
     public void render(Graphics g) {
@@ -86,7 +86,7 @@ public abstract class Entity {
             g.drawImage(this.sprite, this.getX() + ((32 - this.getWidth()) / 2) - Camera.x, this.getY() + ((32 - this.getHeight()) / 2) - Camera.y, null);
         } else {
             g.setColor(Color.GREEN);
-            g.fillRect(x, y, width, height);
+            g.fillRect(x - Camera.x, y - Camera.y, width, height);
         }
     }
 

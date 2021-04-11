@@ -57,37 +57,35 @@ public class Player extends Entity {
         if (!moved) {
             index = 0;
         }
-        if (up && Game.world.isFree(getX(), getY() - speed)) {
+        if (up && Game.world.isFree(getX(), getY() - speed)
+                && !(weapon != null && weapon.stopOnAttack && isAttacking)) {
             setY(getY() - speed);
             lastPressedMovementKey = "up";
             moved = true;
-        } else if (down && Game.world.isFree(getX(), getY() + speed)) {
+        } else if (down && Game.world.isFree(getX(), getY() + speed)
+                && !(weapon != null && weapon.stopOnAttack && isAttacking)) {
             setY(getY() + speed);
             lastPressedMovementKey = "down";
             moved = true;
         }
-        if (right && Game.world.isFree(getX() + speed, getY())) {
+        if (right && Game.world.isFree(getX() + speed, getY())
+                && !(weapon != null && weapon.stopOnAttack && isAttacking)) {
             setX(getX() + speed);
             lastPressedMovementKey = "right";
             moved = true;
-        } else if (left && Game.world.isFree(getX() - speed, getY())) {
+        } else if (left && Game.world.isFree(getX() - speed, getY())
+                && !(weapon != null && weapon.stopOnAttack && isAttacking)) {
             setX(getX() - speed);
             lastPressedMovementKey = "left";
             moved = true;
         }
 
         if (attacked) {
-            isAttacking = true;
             attacked = false;
-            int dx = left ? -1 : right ? 1 : 0;
-            int dy = up ? -1 : down ? 1 : 0;
-            if (dx == 0) {
-                dx = this.lastPressedMovementKey.equals("left") ? -1 : this.lastPressedMovementKey.equals("right") ? 1 : 0;
-            }
-            if (dy == 0) {
-                dy = this.lastPressedMovementKey.equals("up") ? -1 : this.lastPressedMovementKey.equals("down") ? 1 : 0;
-            }
+            int dx = this.lastPressedMovementKey.equals("left") ? -1 : this.lastPressedMovementKey.equals("right") ? 1 : 0;
+            int dy = this.lastPressedMovementKey.equals("up") ? -1 : this.lastPressedMovementKey.equals("down") ? 1 : 0;
             if (this.changeMana(weapon.attacks.get(attackId).manaCost)) {
+                isAttacking = true;
                 weapon.attack(getX(), getY(), dx, dy, attackId, this);
             }
         }
@@ -98,6 +96,7 @@ public class Player extends Entity {
             if (attack != null) {
                 if (attackFrames >= weapon.attacks.get(attackId).cooldown) {
                     isAttacking = false;
+                    attackFrames = 0;
                 }
             } else {
                 isAttacking = false;
@@ -141,7 +140,7 @@ public class Player extends Entity {
 
     public void onKeyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == KeyEvent.VK_J && !isAttacking) {
+        if (e.getKeyCode() == KeyEvent.VK_J && !isAttacking && this.weapon != null) {
             attacked = true;
             attackId = 0;
         }
@@ -208,8 +207,9 @@ public class Player extends Entity {
     }
 
     @Override
-    public void receiveCollision(Attack attack) {
+    public boolean receiveCollision(Attack attack) {
         this.changeLife(-attack.damage);
+        return true;
     }
 
 }

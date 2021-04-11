@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class Fireball extends Attack {
 
-    public static final int cooldown = 2, damage = 5, manaCost = 2;
+    public static final int cooldown = 60, damage = 20, manaCost = 10;
 
     private int speed = 5;
 
@@ -22,7 +22,10 @@ public class Fireball extends Attack {
         for (int i = 0; i < Game.entities.size(); i++) {
             Entity entity = Game.entities.get(i);
             if (isColidding(this, entity) && !entity.equals(this) && !entity.equals(owner)) {
-                entity.receiveCollision(this);
+                boolean received = entity.receiveCollision(this);
+                if (received) {
+                    Game.entities.remove(this);
+                }
             }
         }
         if (Game.world.isFree(this.getX() + this.dx, this.getY() + this.dy)) {

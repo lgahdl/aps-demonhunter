@@ -36,7 +36,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     //Game params
     public static String state;
-    public static String difficulty;
+    public static String difficulty = "NORMAL";
     public static String mode;
 
     //Graphics
@@ -44,7 +44,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     //World
     public static World world;
-    private int curLevel = 1;
+    private static int curLevel = 1;
 
     //Entities
     public static Player player;
@@ -81,7 +81,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         weapons = new ArrayList<>();
         player = new Player(0, 0, 32, 32);
         entities.add(player);
-        world = new World("map" + curLevel + ".png");
     }
 
     private void initFrame() {
@@ -114,11 +113,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public void tick() {
-        for (int i = 0; i < entities.size(); i++) {
-            Entity e = entities.get(i);
-            e.tick();
+        if (state == "PLAYING") {
+            for (int i = 0; i < entities.size(); i++) {
+                Entity e = entities.get(i);
+                e.tick();
+            }
+            player.tick();
         }
-        player.tick();
     }
 
     public void showOnScreen(int screen, JFrame frame) {
@@ -159,8 +160,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         //RENDERIZAÇÃO DAS ENTIDADES ABAIXO!!!
-
-        world.render(g);
+        if (world != null) {
+            world.render(g);
+        }
 
         switch (state) {
             case "REGISTER":
@@ -316,4 +318,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public void mouseMoved(MouseEvent e) {
 
     }
+
+    public static void startWorld() {
+        world = new World("map" + curLevel + ".png");
+        state = "PLAYING";
+    }
+
 }
