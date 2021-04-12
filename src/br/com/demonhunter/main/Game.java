@@ -185,6 +185,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 menuScreen.render(g);
         }
         if (state.equals("PLAYING")) {
+            System.out.println("PLAYING");
             for (Entity e : entities) {
                 e.render(g);
             }
