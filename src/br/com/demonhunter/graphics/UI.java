@@ -26,7 +26,7 @@ public class UI {
         g.setColor(Color.white);
         g.setFont(new Font("arial", Font.PLAIN, 8));
         g.drawString(Game.player.getLife() + "/" + Game.player.getMaxLife(), 30, 11);
-        
+
         //Mana
         g.setColor(Color.blue);
         g.fillRect(8, 20, (int) (Game.player.getMana() * 0.7), 8);

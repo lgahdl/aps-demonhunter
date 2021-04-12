@@ -1,6 +1,8 @@
 package br.com.demonhunter.entities;
 
 import br.com.demonhunter.entities.attack.Attack;
+import br.com.demonhunter.entities.objects.LifePotion;
+import br.com.demonhunter.entities.objects.ManaPotion;
 import br.com.demonhunter.entities.weapons.Weapon;
 import br.com.demonhunter.graphics.Camera;
 import br.com.demonhunter.main.Game;
@@ -88,9 +90,9 @@ public class Player extends Entity {
 
         if (attacked) {
             attacked = false;
-            int dx = this.lastPressedMovementKey.equals("left") ? -1 : this.lastPressedMovementKey.equals("right") ? 1 : 0;
-            int dy = this.lastPressedMovementKey.equals("up") ? -1 : this.lastPressedMovementKey.equals("down") ? 1 : 0;
             if (this.changeMana(-weapon.attacks.get(attackId).manaCost)) {
+                int dx = this.lastPressedMovementKey.equals("left") ? -1 : this.lastPressedMovementKey.equals("right") ? 1 : 0;
+                int dy = this.lastPressedMovementKey.equals("up") ? -1 : this.lastPressedMovementKey.equals("down") ? 1 : 0;
                 isAttacking = true;
                 weapon.attack(getX(), getY(), dx, dy, attackId, this);
             }
@@ -155,6 +157,7 @@ public class Player extends Entity {
         if (!invunerable) {
             checkCollisionEnemy();
         }
+        checkCollisionPotions();
         setCamera();
     }
 
@@ -187,6 +190,24 @@ public class Player extends Entity {
                     int diffY = getY() - atual.getY();
                     hitDx = Integer.compare(diffX, 0);
                     hitDy = Integer.compare(diffY, 0);
+                }
+            }
+        }
+    }
+
+    public void checkCollisionPotions() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity atual = Game.entities.get(i);
+            if (isColliding(this, atual)) {
+                if (atual instanceof ManaPotion) {
+                    if (changeMana(20)) {
+                        Game.entities.remove(atual);
+                    }
+                }
+                if (atual instanceof LifePotion) {
+                    if (changeLife(20)) {
+                        Game.entities.remove(atual);
+                    }
                 }
             }
         }
@@ -239,18 +260,27 @@ public class Player extends Entity {
         left = false;
     }
 
-    public void changeLife(int lifePoints) {
+    public boolean changeLife(int lifePoints) {
         life += lifePoints;
+        if (life == maxLife + lifePoints && life > maxLife) {
+            life = maxLife;
+            return false;
+        }
         if (life > maxLife) {
             life = maxLife;
         } else if (life <= 0) {
             life = 0;
             this.isDead = true;
         }
+        return true;
     }
 
     public boolean changeMana(int manaPoints) {
         mana += manaPoints;
+        if (mana == maxMana + manaPoints && mana > maxMana) {
+            mana = maxMana;
+            return false;
+        }
         if (mana < 0) {
             mana = 0;
             return false;
@@ -282,6 +312,7 @@ public class Player extends Entity {
     public void setMaxLife(int maxLife) {
         this.maxLife = maxLife;
     }
+
     public int getMana() {
         return mana;
     }
