@@ -228,8 +228,11 @@ public class Player extends Entity {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_E && !isAttacking) {
-            checkCollisionWeapon();
             checkCollisionPotions();
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_R && !isAttacking) {
+            checkCollisionWeapon();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_D) {
