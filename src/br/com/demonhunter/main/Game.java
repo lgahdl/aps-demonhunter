@@ -113,24 +113,24 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 Game.player.setLife(120);
                 Game.player.setMaxMana(50);
                 Game.player.setMana(50);
-                Enemy.gamePointsOnInit = 5;
-                Enemy.lifePointsOnInit = 50;
+                Enemy.setGamePointsOnInit(5);
+                Enemy.setLifePointsOnInit(50);
                 break;
             case "HARD":
                 Game.player.setMaxLife(100);
                 Game.player.setLife(100);
                 Game.player.setMaxMana(40);
                 Game.player.setMana(40);
-                Enemy.gamePointsOnInit = 8;
-                Enemy.lifePointsOnInit = 100;
+                Enemy.setGamePointsOnInit(8);
+                Enemy.setLifePointsOnInit(100);
                 break;
             case "DEMONHUNTER":
                 Game.player.setMaxLife(80);
                 Game.player.setLife(80);
                 Game.player.setMaxMana(30);
                 Game.player.setMana(30);
-                Enemy.gamePointsOnInit = 13;
-                Enemy.lifePointsOnInit = 200;
+                Enemy.setGamePointsOnInit(13);
+                Enemy.setLifePointsOnInit(200);
                 break;
         }
         Game.state = "MENU";

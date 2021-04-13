@@ -10,11 +10,11 @@ public class Enemy extends Entity {
 
     private int speed = 1;
     //STATUS
-    public static int lifePointsOnInit = 50; //50, 100, 200
+    private static int lifePointsOnInit = 50; //50, 100, 200
 
     private int life;
 
-    public static int gamePointsOnInit = 5; //5,8,13
+    private static int gamePointsOnInit = 5; //5,8,13
 
     private int gamePoints;
 
@@ -102,6 +102,14 @@ public class Enemy extends Entity {
             hitDy = attack.dy;
         }
         return true;
+    }
+
+    public static void setGamePointsOnInit(int gamePoints) {
+        Enemy.gamePointsOnInit = gamePoints;
+    }
+
+    public static void setLifePointsOnInit(int lifePoints){
+        Enemy.lifePointsOnInit = lifePoints
     }
 
 }
