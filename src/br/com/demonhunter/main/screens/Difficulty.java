@@ -31,18 +31,14 @@ public class Difficulty implements Screen {
     public void onClick(int x, int y) {
         if (x > 50 && x < 350) {
             if (y >= 50 && y <= 75) {
-                setDifficulty("NORMAL");
+                Game.setDifficulty("NORMAL");
                 return;
             } else if (y >= 100 && y <= 125) {
-                setDifficulty("HARD");
+                Game.setDifficulty("HARD");
                 return;
             } else if (y >= 150 && y <= 175) {
-                setDifficulty("DEMONHUNTER");
+                Game.setDifficulty("DEMONHUNTER");
             }
         }
-    }
-
-    private void setDifficulty(String difficulty) {
-        Game.setDifficulty(difficulty);
     }
 }
