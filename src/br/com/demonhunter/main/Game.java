@@ -1,12 +1,15 @@
 package br.com.demonhunter.main;
 
+import br.com.demonhunter.entities.Enemy;
 import br.com.demonhunter.entities.Entity;
 import br.com.demonhunter.entities.Player;
 import br.com.demonhunter.entities.weapons.Weapon;
 import br.com.demonhunter.graphics.SpriteManager;
 import br.com.demonhunter.graphics.UI;
-import br.com.demonhunter.main.screens.*;
+import br.com.demonhunter.main.screens.Difficulty;
 import br.com.demonhunter.main.screens.Menu;
+import br.com.demonhunter.main.screens.Mode;
+import br.com.demonhunter.main.screens.Register;
 import br.com.demonhunter.world.World;
 
 import javax.swing.*;
@@ -100,6 +103,37 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
         }
+    }
+
+    public static void setDifficulty(String difficulty) {
+        Game.difficulty = difficulty;
+        switch (difficulty) {
+            case "NORMAL":
+                Game.player.setMaxLife(120);
+                Game.player.setLife(120);
+                Game.player.setMaxMana(50);
+                Game.player.setMana(50);
+                Enemy.gamePointsOnInit = 5;
+                Enemy.lifePointsOnInit = 50;
+                break;
+            case "HARD":
+                Game.player.setMaxLife(100);
+                Game.player.setLife(100);
+                Game.player.setMaxMana(40);
+                Game.player.setMana(40);
+                Enemy.gamePointsOnInit = 8;
+                Enemy.lifePointsOnInit = 100;
+                break;
+            case "DEMONHUNTER":
+                Game.player.setMaxLife(80);
+                Game.player.setLife(80);
+                Game.player.setMaxMana(30);
+                Game.player.setMana(30);
+                Enemy.gamePointsOnInit = 13;
+                Enemy.lifePointsOnInit = 200;
+                break;
+        }
+        Game.state = "MENU";
     }
 
     public static void main(String[] args) {

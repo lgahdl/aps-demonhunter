@@ -48,7 +48,6 @@ public class World {
                             // PLAYER
                             Game.player.setX(i * 32);
                             Game.player.setY(j * 32);
-
                             break;
                         case 0xFFFF0000: // VERMELHO
                             // ENEMY

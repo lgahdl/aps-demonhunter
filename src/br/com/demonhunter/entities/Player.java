@@ -28,7 +28,7 @@ public class Player extends Entity {
 
     //STATUS
 
-    private int life = 100, maxLife = 100, mana = 100, maxMana = 100, points = 0;
+    private int life = 120, maxLife = 120, mana = 50, maxMana = 50, points = 0;
     public boolean isDead = false;
 
     //MOVEMENT

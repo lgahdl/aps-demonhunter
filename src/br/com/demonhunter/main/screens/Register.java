@@ -51,7 +51,7 @@ public class Register implements Screen {
         isEmptyString = false;
         isUnderAge = false;
 
-        if (age == "" || name == "") {
+        if (age == "" || name == "" || !name.matches("([a-zA-Z])*([0-9])*")) {
             isEmptyString = true;
             return;
         }

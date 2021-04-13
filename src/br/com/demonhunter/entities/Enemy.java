@@ -10,9 +10,13 @@ public class Enemy extends Entity {
 
     private int speed = 1;
     //STATUS
-    private int life = 50;
+    public static int lifePointsOnInit = 50; //50, 100, 200
 
-    private int gamePoints = 5; //5,8,13
+    private int life;
+
+    public static int gamePointsOnInit = 5; //5,8,13
+
+    private int gamePoints;
 
     private int hitDamage = 0, hitDx = 0, hitDy = 0;
 
@@ -23,18 +27,8 @@ public class Enemy extends Entity {
     public Enemy(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.setSprite(Game.spriteManager.enemySpriteSheet.getSprite(0, 0, 32, 32));
-        switch (Game.difficulty) {
-            case "NORMAL":
-                break;
-            case "HARD":
-                life = 100;
-                gamePoints = 8;
-                break;
-            case "DEMONHUNTER":
-                life = 200;
-                gamePoints = 13;
-                break;
-        }
+        this.life = lifePointsOnInit;
+        this.gamePoints = gamePointsOnInit;
     }
 
     @Override
