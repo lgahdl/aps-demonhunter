@@ -34,6 +34,9 @@ public class UI {
         g.setFont(new Font("arial", Font.PLAIN, 8));
         g.drawString(Game.player.getMana() + "/" + Game.player.getMaxMana(), 30, 27);
 
+        g.setFont(new Font("arial", Font.PLAIN, 8));
+        g.drawString("Points: " + Game.player.getPoints(), 30, 43);
+
         //Mapa
     }
 

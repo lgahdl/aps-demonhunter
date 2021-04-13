@@ -12,6 +12,8 @@ public class Enemy extends Entity {
     //STATUS
     private int life = 50;
 
+    private int gamePoints = 5; //5,8,13
+
     private int hitDamage = 0, hitDx = 0, hitDy = 0;
 
     private boolean invunerable = false, receivedHit = false, throwBack = false;
@@ -26,18 +28,17 @@ public class Enemy extends Entity {
                 break;
             case "HARD":
                 life = 100;
+                gamePoints = 8;
                 break;
             case "DEMONHUNTER":
                 life = 200;
+                gamePoints = 13;
                 break;
         }
     }
 
     @Override
     public void tick() {
-        if (life <= 0) {
-            Game.entities.remove(this);
-        }
         if (Math.abs(this.getX() - Game.player.getX()) < 100 || Math.abs(this.getY() - Game.player.getY()) < 100) {
             if (Game.player.getX() < this.getX()
                     && Game.world.isFree(this.getX() - speed, this.getY())) {
@@ -57,6 +58,10 @@ public class Enemy extends Entity {
         }
         if (receivedHit) {
             changeLife(-hitDamage);
+            if (life <= 0) {
+                Game.entities.remove(this);
+                Game.player.addPoints(this.gamePoints);
+            }
             hitDamage = 0;
             receivedHit = false;
             invunerable = true;

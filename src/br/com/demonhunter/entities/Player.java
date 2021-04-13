@@ -28,7 +28,7 @@ public class Player extends Entity {
 
     //STATUS
 
-    private int life = 100, maxLife = 100, mana = 100, maxMana = 100;
+    private int life = 100, maxLife = 100, mana = 100, maxMana = 100, points = 0;
     public boolean isDead = false;
 
     //MOVEMENT
@@ -58,6 +58,14 @@ public class Player extends Entity {
             sprites.get("up")[i] = Game.spriteManager.playerSpriteSheet.getSprite(32 * i, 96, 32, 32);
         }
 
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
     }
 
     @Override
@@ -153,11 +161,10 @@ public class Player extends Entity {
         }
 
         setSprite(sprites.get(lastPressedMovementKey)[index]);
-        checkCollisionWeapon();
         if (!invunerable) {
             checkCollisionEnemy();
         }
-        checkCollisionPotions();
+
         setCamera();
     }
 
@@ -168,26 +175,26 @@ public class Player extends Entity {
 
     public void checkCollisionWeapon() {
         for (int i = 0; i < Game.weapons.size(); i++) {
-            Weapon atual = Game.weapons.get(i);
-            if (isColliding(this, atual)) {
+            Weapon current = Game.weapons.get(i);
+            if (isColliding(this, current)) {
                 if (this.weapon != null) {
-                    Game.weapons.add(this.weapon.getInstance(this.getX() + 64, this.getY() + 32));
+                    Game.weapons.add(this.weapon.getInstance(this.getX(), this.getY()));
                 }
-                weapon = atual;
-                Game.weapons.remove(atual);
+                weapon = current;
+                Game.weapons.remove(current);
             }
         }
     }
 
     public void checkCollisionEnemy() {
         for (int i = 0; i < Game.entities.size(); i++) {
-            Entity atual = Game.entities.get(i);
-            if (isColliding(this, atual)) {
-                if (atual instanceof Enemy) {
+            Entity current = Game.entities.get(i);
+            if (isColliding(this, current)) {
+                if (current instanceof Enemy) {
                     receivedHit = true;
                     hitDamage = 10;
-                    int diffX = getX() - atual.getX();
-                    int diffY = getY() - atual.getY();
+                    int diffX = getX() - current.getX();
+                    int diffY = getY() - current.getY();
                     hitDx = Integer.compare(diffX, 0);
                     hitDy = Integer.compare(diffY, 0);
                 }
@@ -218,6 +225,11 @@ public class Player extends Entity {
         if (e.getKeyCode() == KeyEvent.VK_J && !isAttacking && this.weapon != null) {
             attacked = true;
             attackId = 0;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_E && !isAttacking) {
+            checkCollisionWeapon();
+            checkCollisionPotions();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_D) {

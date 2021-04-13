@@ -36,7 +36,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     //Game params
     public static String state;
     public static String difficulty = "NORMAL";
-    public static String mode;
+    public static String mode = "CAMPAIGN";
 
     //Graphics
     public static SpriteManager spriteManager;
